@@ -153,7 +153,94 @@ $(document).ready(function(){
 
 	}());
 
+	//Валидация формы регистрации
+	(function(){
+		var formValidReg = {
+			
+			isValid: true,
 
+			init: function(){
+				this._setUpListeners();
+			},
+
+			_setUpListeners: function(){
+				$('#sendingRegParams').on('click', formValidReg._formRegCheckMethod );
+			
+			
+			var formInputs = $("#regFormInputs").find('input');
+				$.each(formInputs, function(index, val){
+					var formInput = $(val);
+					// Спрятать ошибки
+					
+					formInput.on('keydown', function(){
+
+						$(".show-error").fadeOut(2000).removeClass('show-error');
+
+					});
+
+					formInput.on('change', function(){
+
+						$(".show-error").fadeOut(2000).removeClass('show-error');
+
+					});	
+
+				});
+			},
+			
+			_formRegCheckMethod: function(e){
+	    		e.preventDefault();
+					var regPageForm = $("#regFormInputs"),
+							emailVal = $("#emailToEntered").val().trim(),
+							passwordVal = $("#passwordToEntered").val().trim(),
+							adminEmail = "mail@mail.com",
+							mailChecker = /^([a-z0-9_\.-])+@[a-z0-9-]+\.([a-z]{2,4}\.)?[a-z]{2,4}$/i,
+							valid = true;
+
+					
+				if ( emailVal.length === 0 ) {
+					
+					$("#notEnteredEmail").fadeIn(2000).addClass('show-error');
+					
+					valid = false;
+
+				} else if ( !mailChecker.test(emailVal) ) {
+					
+					$("#incorrectEmail").fadeIn(2000).addClass('show-error');
+					
+					valid = false;
+
+  				}  else if ( emailVal === adminEmail ) {    
+					
+					$(".occupiedMail").fadeIn(2000).addClass('show-error');
+
+						valid = false;
+
+				} else {
+  					
+  			$(".show-error").fadeOut(2000).removeClass('show-error');
+  				
+				if ( passwordVal.length === 0 ) {
+						
+						$("#notEnteredPassword").fadeIn(2000).addClass('show-error');
+						
+						valid = false;
+					}
+				
+				}		
+
+				
+				if ( valid === true ) {
+					console.log('Ура');
+					regPageForm.submit();
+
+				}
+			
+			}
+		};
+
+		formValidReg.init();
+
+}());
 
 });
 
